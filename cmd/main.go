@@ -10,11 +10,9 @@ import (
 func main() {
 	logger := log.New(os.Stdout, "[MovieMe] ", log.LstdFlags|log.Lshortfile)
 
-
 	cfg := api.Config{
 		Addr: ":8080",
 	}
-
 
 	app := api.Application{
 		Config: cfg,
