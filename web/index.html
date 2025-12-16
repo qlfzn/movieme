@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMind - Intentional Movie Discovery</title>
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e1e4e8;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
+        }
+
+        .tagline {
+            font-size: 0.95rem;
+            color: #6c757d;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem 3rem;
+        }
+
+        /* ===== SEARCH SECTION ===== */
+        .search-section {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-section h2 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #ffffff;
+            cursor: pointer;
+            transition: border-color 0.15s ease-in-out;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #495057;
+        }
+
+        .button-primary {
+            width: 100%;
+            padding: 0.875rem;
+            background-color: #2c3e50;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .button-primary:hover {
+            background-color: #1a252f;
+        }
+
+        .button-primary:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* ===== RESULTS SECTION ===== */
+        .results-section {
+            margin-top: 2rem;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-count {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .loading-message,
+        .error-message,
+        .empty-message {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+        }
+
+        .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            padding: 1rem;
+        }
+
+        /* ===== MOVIE CARDS ===== */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .movie-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s;
+        }
+
+        .movie-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .movie-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .movie-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .movie-body {
+            padding: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-summary {
+            font-size: 0.95rem;
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .vibe-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .vibe-tag {
+            padding: 0.25rem 0.75rem;
+            background-color: #f1f3f5;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #495057;
+        }
+
+        .watch-if-list {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .watch-if-list li {
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+
+        .watch-if-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0.5rem;
+            color: #6c757d;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-section {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* ===== UTILITY ===== */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1>MovieMind</h1>
+            <p class="tagline">Intentional movie discovery. No algorithms, no overwhelm.</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Search Section -->
+        <section class="search-section">
+            <h2>What are you in the mood for?</h2>
+            
+            <form id="searchForm">
+                <div class="form-group">
+                    <label for="genreSelect">Choose a genre</label>
+                    <select id="genreSelect" required>
+                        <option value="">Select a genre...</option>
+                        <option value="Action">Action</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Crime">Crime</option>
+                        <option value="Drama">Drama</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Thriller">Thriller</option>
+                        <option value="Science Fiction">Sci-Fi</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="button-primary" id="searchButton">
+                    Find Movies
+                </button>
+            </form>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <!-- Loading State -->
+            <div id="loadingMessage" class="loading-message hidden">
+                <p>Finding great movies for you...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorMessage" class="error-message hidden">
+                <p>Something went wrong. Please try again.</p>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyMessage" class="empty-message">
+                <p>Select a genre above to discover movies</p>
+            </div>
+
+            <!-- Results -->
+            <div id="resultsContainer" class="hidden">
+                <div class="results-header">
+                    <span class="results-count" id="resultsCount"></span>
+                </div>
+                <div class="movies-grid" id="moviesGrid"></div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // ===== CONFIGURATION =====
+        const API_BASE_URL = 'http://localhost:8080/api/v1/movies';
+
+        // ===== DOM ELEMENTS =====
+        const searchForm = document.getElementById('searchForm');
+        const genreSelect = document.getElementById('genreSelect');
+        const searchButton = document.getElementById('searchButton');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const emptyMessage = document.getElementById('emptyMessage');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const resultsCount = document.getElementById('resultsCount');
+        const moviesGrid = document.getElementById('moviesGrid');
+
+        // ===== UTILITY FUNCTIONS =====
+
+        /**
+         * Show a specific section and hide others
+         */
+        function showSection(section) {
+            loadingMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            emptyMessage.classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+
+            section.classList.remove('hidden');
+        }
+
+        /**
+         * Format movie runtime (minutes to hours and minutes)
+         */
+        function formatRuntime(minutes) {
+            if (!minutes) return 'N/A';
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+        }
+
+        /**
+         * Create HTML for a single movie card
+         */
+        function createMovieCard(movie) {
+            return `
+                <article class="movie-card">
+                    <div class="movie-header">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <div class="movie-meta">
+                            <span>${movie.year || 'N/A'}</span>
+                            <span>${formatRuntime(movie.runtime)}</span>
+                            <span>★ ${movie.rating ? movie.rating.toFixed(1) : 'N/A'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="movie-body">
+                        ${movie.one_liner ? `
+                            <p class="movie-summary"><em>"${movie.one_liner}"</em></p>
+                        ` : ''}
+                        
+                        ${movie.ai_summary ? `
+                            <p class="movie-summary">${movie.ai_summary}</p>
+                        ` : ''}
+                        
+                        ${movie.vibe && movie.vibe.length > 0 ? `
+                            <div class="section-title">Vibe</div>
+                            <div class="vibe-tags">
+                                ${movie.vibe.map(v => `<span class="vibe-tag">${v}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${movie.watch_if && movie.watch_if.length > 0 ? `
+                            <div class="section-title">Watch if</div>
+                            <ul class="watch-if-list">
+                                ${movie.watch_if.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+                    </div>
+                </article>
+            `;
+        }
+
+        /**
+         * Render all movies to the grid
+         */
+        function renderMovies(movies) {
+            moviesGrid.innerHTML = movies.map(movie => createMovieCard(movie)).join('');
+        }
+
+        // ===== API FUNCTIONS =====
+
+        /**
+         * Fetch movies from the API
+         */
+        async function fetchMovies(genre) {
+            const response = await fetch(`${API_BASE_URL}/explore?genre=${genre}`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch movies');
+            }
+            
+            return await response.json();
+        }
+
+        // ===== EVENT HANDLERS =====
+
+        /**
+         * Handle form submission
+         */
+        async function handleSearch(event) {
+            event.preventDefault();
+            
+            const genre = genreSelect.value;
+            
+            if (!genre) {
+                return;
+            }
+
+            // Show loading state
+            showSection(loadingMessage);
+            searchButton.disabled = true;
+
+            try {
+                // Fetch movies from API
+                const data = await fetchMovies(genre);
+                
+                if (!data.movies || data.movies.length === 0) {
+                    // No movies found
+                    showSection(emptyMessage);
+                    emptyMessage.querySelector('p').textContent = 
+                        'No movies found for this genre. Try another one!';
+                } else {
+                    // Display results
+                    renderMovies(data.movies);
+                    resultsCount.textContent = 
+                        `Found ${data.movies.length} movie${data.movies.length !== 1 ? 's' : ''}`;
+                    showSection(resultsContainer);
+                }
+            } catch (error) {
+                // Show error state
+                console.error('Error fetching movies:', error);
+                showSection(errorMessage);
+            } finally {
+                // Re-enable button
+                searchButton.disabled = false;
+            }
+        }
+
+        // ===== INITIALIZATION =====
+
+        /**
+         * Set up event listeners when page loads
+         */
+        function init() {
+            searchForm.addEventListener('submit', handleSearch);
+            console.log('MovieMind initialized');
+        }
+
+        // Start the app when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

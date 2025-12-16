@@ -1,6 +1,84 @@
-# 🎬 MovieMe
+# 🎬 Movie Discovery API (Go + TMDB + AI)
 
-> **Movie Explorer API**  
-> Stop scrolling, start watching.
+A simple **REST API** that allows users to discover movies by genre using the **TMDB API**, and generate **AI-powered summaries** for selected movies.
 
-MovieMe is a simple and focused movie explorer API that helps you find movies without the overwhelm. Define your genre and other filters, and you can get movie suggestions for your next watch.
+---
+
+## Features
+
+* **Discover movies by genre**
+  Users provide a genre name (e.g. `action`, `comedy`), and the API returns movies that match the selected genre.
+
+* **AI-generated movie summary**
+  Users can request an AI-generated summary for any movie returned by the API.
+
+---
+
+## Architecture Overview
+
+```
+Client
+  |
+  v
+Golang REST API
+  |
+  ├── TMDB API (movie discovery)
+  └── AI API (movie summaries)
+```
+
+---
+
+## API Endpoints
+
+### 1. Get Movies by Genre
+
+```http
+GET /movies?genre=action
+```
+
+**Response**
+
+```json
+{
+  "genre": "action",
+  "movies": [
+    {
+      "id": 603,
+      "title": "The Matrix",
+      "release_date": "1999-03-30",
+      "rating": 8.2
+    }
+  ]
+}
+```
+
+---
+
+### 2. Get AI Summary for a Movie
+
+```http
+POST /movies/{movieId}/summary
+```
+
+**Response**
+
+```json
+{
+  "movie_id": 603,
+  "summary": "A mind-bending sci-fi action film that explores reality, freedom, and control through the journey of a hacker who uncovers the truth about his world."
+}
+```
+
+---
+
+## Tech Stack
+
+* **Backend**: Golang
+* **Frontend (Demo)**: HTML + JavaScript
+* **External APIs**:
+
+  * TMDB API
+  * OpenAI API (LLM-based summary generation)
+
+* **Deployment**: AWS
+---

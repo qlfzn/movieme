@@ -37,7 +37,7 @@ func (h Handler) GetMoviesByGenre(w http.ResponseWriter, r *http.Request) {
 		Genre: genre,
 	}
 
-	ctx, cancel := context.WithTimeout(r.Context(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
 
 	results, err := h.serviceClient.FetchMovies(ctx, params.Genre)

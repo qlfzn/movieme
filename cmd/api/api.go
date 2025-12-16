@@ -4,7 +4,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	"github.com/qlfzn/movieme/internal/handlers"
 )
 
@@ -20,6 +22,18 @@ type Config struct {
 // create HTTP router for api
 func (app *Application) Mount() http.Handler {
 	r := chi.NewRouter()
+
+	r.Use(middleware.RequestID)
+  	r.Use(middleware.RealIP)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		MaxAge:         300,
+	}))
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("hello world!"))
