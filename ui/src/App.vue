@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen bg-zinc-950 text-zinc-100">
     <!-- Header -->
-    <header class="border-b border-zinc-800 bg-linear-to-b from-zinc-900 to-zinc-950 backdrop-blur-sm sticky top-0 z-10">
+    <header class="border-b border-zinc-800 bg-gradient-to-b from-zinc-900 to-zinc-950 backdrop-blur-sm sticky top-0 z-10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <h1 class="text-2xl font-semibold text-balance bg-linear-to-r from-zinc-100 to-zinc-400 bg-clip-text text-transparent">Movie Explorer</h1>
+        <h1 class="text-2xl font-semibold text-balance bg-gradient-to-r from-zinc-100 to-zinc-400 bg-clip-text text-transparent">Movie Explorer</h1>
         <p class="mt-1 text-sm text-teal-400/70">Discover your next favorite film</p>
       </div>
     </header>
@@ -27,7 +27,7 @@
               :class="[
                 'group relative px-4 py-6 rounded-lg text-sm font-medium transition-all overflow-hidden',
                 selectedGenre === genre
-                  ? 'bg-linear-to-br from-teal-600 to-teal-700 text-white shadow-lg shadow-teal-900/50 scale-105 border border-teal-500/50'
+                  ? 'bg-gradient-to-br from-teal-600 to-teal-700 text-white shadow-lg shadow-teal-900/50 scale-105 border border-teal-500/50'
                   : 'bg-zinc-800/50 text-zinc-300 hover:bg-zinc-800 border border-zinc-700/50 hover:border-zinc-600'
               ]"
             >
@@ -50,7 +50,7 @@
               :class="[
                 'flex-1 px-6 py-4 font-medium rounded-lg transition-all',
                 selectedGenre && !loading
-                  ? 'bg-linear-to-r from-teal-600 to-teal-700 text-white hover:from-teal-500 hover:to-teal-600 shadow-md shadow-teal-900/30 hover:shadow-lg hover:shadow-teal-900/40'
+                  ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:from-teal-500 hover:to-teal-600 shadow-md shadow-teal-900/30 hover:shadow-lg hover:shadow-teal-900/40'
                   : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
               ]"
             >
@@ -73,7 +73,7 @@
               :class="[
                 'px-6 py-4 font-medium rounded-lg transition-all flex items-center gap-2',
                 selectedGenre || movies.length > 0
-                  ? 'bg-zinc-800 text-zinc-300 hover:bg-zinc-750 border border-zinc-700 hover:border-zinc-600'
+                  ? 'bg-zinc-800 text-zinc-300 hover:bg-zinc-750 border border-zinc-700 hover:border-teal-700/50'
                   : 'bg-zinc-800/50 text-zinc-600 cursor-not-allowed border border-zinc-800'
               ]"
             >
@@ -106,7 +106,7 @@
             class="group bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden hover:border-teal-700/40 transition-all duration-300 hover:shadow-xl hover:shadow-teal-950/20"
           >
             <!-- Movie Poster -->
-            <div class="aspect-2/3 bg-zinc-800 relative overflow-hidden">
+            <div class="aspect-[2/3] bg-zinc-800 relative overflow-hidden">
               <img
                 v-if="movie.poster"
                 :src="movie.poster"
@@ -483,7 +483,6 @@ const fetchMovies = async () => {
   }
 
   try {
-    // Replace with your actual endpoint
     const response = await fetch(`${API_BASE_URL}/movies?genre=${encodeURIComponent(selectedGenre.value)}`)
     
     if (!response.ok) {
@@ -492,18 +491,18 @@ const fetchMovies = async () => {
 
     const data = await response.json()
     
-    // Map your backend response to the expected format
-    // TODO: Adjust this based on your actual API response structure
-    movies.value = data.map(movie => ({
-      id: movie.id,
-      title: movie.title,
-      year: movie.year,
-      rating: movie.rating,
-      poster: movie.poster, // Add poster URL from your API if available
+    // Map backend response: original_title, overview, popularity, release_date, vote_average
+    movies.value = data.map((movie, index) => ({
+      id: index + 1, // Use index as ID if backend doesn't provide one
+      title: movie.original_title,
+      year: movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A',
+      rating: movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A',
+      poster: '/placeholder.svg?height=450&width=300', // Use placeholder or add poster_path if available
+      plot: movie.overview,
       showingSummary: false,
       loadingSummary: false,
       summary: null,
-      details: movie
+      details: movie // Store full movie object for AI summary
     }))
   } catch (error) {
     console.error('Error fetching movies:', error)

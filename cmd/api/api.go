@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/qlfzn/movieme/internal/handlers"
 )
 
 type Application struct {
@@ -24,10 +25,11 @@ func (app *Application) Mount() http.Handler {
 		w.Write([]byte("hello world!"))
 	})
 
-	r.Route("/movies", func(r chi.Router) {
-		r.Get("/explore", GetMoviesByGenre) // get movies by genre & filters
-		r.Get("/summary", GetAISummary) // generate AI summary for movie
+	moviesHandler := handlers.NewHandler()
 
+	r.Route("/api/v1/movies", func(r chi.Router) {
+		r.Get("/explore", moviesHandler.GetMoviesByGenre) // get movies by genre & filters
+		// r.Get("/summary:id", GetAISummary) // generate AI summary for movie
 	})
 
 	return r
