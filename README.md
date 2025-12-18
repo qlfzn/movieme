@@ -1,15 +1,15 @@
-# 🎬 Movie Discovery API (Go + TMDB + AI)
+# 🎬 Movie Explorer API (Go + TMDB + OpenAI)
 
-A simple **REST API** that allows users to discover movies by genre using the **TMDB API**, and generate **AI-powered summaries** for selected movies.
+A simple **REST API** that allows users to explore movies by genre using the **TMDB API**, and generate **AI summaries** for selected movies.
 
 ---
 
 ## Features
 
-* **Discover movies by genre**
+* **Discover movies by genre**: <br> 
   Users provide a genre name (e.g. `action`, `comedy`), and the API returns movies that match the selected genre.
 
-* **AI-generated movie summary**
+* **AI-generated movie summary**: <br>
   Users can request an AI-generated summary for any movie returned by the API.
 
 ---
@@ -43,11 +43,12 @@ GET /movies?genre=action
   "genre": "action",
   "movies": [
     {
-      "id": 603,
       "title": "The Matrix",
-      "release_date": "1999-03-30",
-      "rating": 8.2
-    }
+      "overview": "Superman, a journalist in Metropolis, embarks on a journey to reconcile his Kryptonian heritage with his human upbringing as Clark Kent.",
+      "popularity": 50.8257,
+      "release_date": "2025-07-09",
+      "rating": 7.402
+    },
   ]
 }
 ```

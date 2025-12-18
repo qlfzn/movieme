@@ -42,8 +42,8 @@ func (app *Application) Mount() http.Handler {
 	moviesHandler := handlers.NewHandler()
 
 	r.Route("/api/v1/movies", func(r chi.Router) {
-		r.Get("/explore", moviesHandler.GetMoviesByGenre) // get movies by genre & filters
-		// r.Get("/summary:id", GetAISummary) // generate AI summary for movie
+		r.Get("/explore", moviesHandler.GetMoviesByGenre)
+		r.Post("/summary", moviesHandler.GetAISummary)
 	})
 
 	return r
