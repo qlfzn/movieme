@@ -1,15 +1,5 @@
-const API_BASE_URL = 'http://localhost:8000/api';
-
-// ===== DOM ELEMENTS =====
-const searchForm = document.getElementById('searchForm');
-const genreSelect = document.getElementById('genreSelect');
-const searchButton = document.getElementById('searchButton');
-const loadingMessage = document.getElementById('loadingMessage');
-const errorMessage = document.getElementById('errorMessage');
-const emptyMessage = document.getElementById('emptyMessage');
-const resultsContainer = document.getElementById('resultsContainer');
-const resultsCount = document.getElementById('resultsCount');
-const moviesGrid = document.getElementById('moviesGrid');
+// ===== CONFIGURATION =====
+const API_BASE_URL = 'http://localhost:8080/api/v1/movies';
 
 // ===== UTILITY FUNCTIONS =====
 
@@ -26,31 +16,48 @@ function showSection(section) {
 }
 
 /**
- * Format movie runtime (minutes to hours and minutes)
+ * Extract year from release_date
  */
-function formatRuntime(minutes) {
-    if (!minutes) return 'N/A';
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+function extractYear(releaseDate) {
+    if (!releaseDate) return 'N/A';
+    return releaseDate.split('-')[0];
+}
+
+/**
+ * Format popularity score
+ */
+function formatPopularity(popularity) {
+    if (!popularity) return 'N/A';
+    if (popularity >= 1000) {
+        return `${(popularity / 1000).toFixed(1)}K`;
+    }
+    return Math.round(popularity).toString();
 }
 
 /**
  * Create HTML for a single movie card
  */
 function createMovieCard(movie) {
+    const year = extractYear(movie.release_date);
+    const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
+    const popularity = formatPopularity(movie.popularity);
+    
     return `
         <article class="movie-card">
             <div class="movie-header">
                 <h3 class="movie-title">${movie.title}</h3>
                 <div class="movie-meta">
-                    <span>${movie.year || 'N/A'}</span>
-                    <span>${formatRuntime(movie.runtime)}</span>
-                    <span>★ ${movie.rating ? movie.rating.toFixed(1) : 'N/A'}</span>
+                    <span>${year}</span>
+                    <span>★ ${rating}</span>
+                    <span>${popularity} views</span>
                 </div>
             </div>
             
             <div class="movie-body">
+                ${movie.overview ? `
+                    <p class="movie-summary">${movie.overview}</p>
+                ` : ''}
+                
                 ${movie.one_liner ? `
                     <p class="movie-summary"><em>"${movie.one_liner}"</em></p>
                 ` : ''}
@@ -90,7 +97,8 @@ function renderMovies(movies) {
  * Fetch movies from the API
  */
 async function fetchMovies(genre) {
-    const response = await fetch(`${API_BASE_URL}/discover?genres=${genre}&limit=10`);
+    const response = await fetch(`${API_BASE_URL}/explore?genre=${genre}&limit=10`);
+    console.log(response)
     
     if (!response.ok) {
         throw new Error('Failed to fetch movies');
@@ -120,17 +128,19 @@ async function handleSearch(event) {
     try {
         // Fetch movies from API
         const data = await fetchMovies(genre);
+
+        console.log(`Data: `, data)
         
-        if (!data.movies || data.movies.length === 0) {
+        if (!data || data.length === 0) {
             // No movies found
             showSection(emptyMessage);
             emptyMessage.querySelector('p').textContent = 
                 'No movies found for this genre. Try another one!';
         } else {
             // Display results
-            renderMovies(data.movies);
+            renderMovies(data);
             resultsCount.textContent = 
-                `Found ${data.movies.length} movie${data.movies.length !== 1 ? 's' : ''}`;
+                `Found ${data.length} movie${data.length !== 1 ? 's' : ''}`;
             showSection(resultsContainer);
         }
     } catch (error) {
