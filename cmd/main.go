@@ -8,7 +8,7 @@ import (
 	"github.com/qlfzn/movieme/cmd/api"
 )
 
-func main() { 
+func main() {
 	logger := log.New(os.Stdout, "[MOVIEME] ", log.LstdFlags|log.Lshortfile)
 
 	err := godotenv.Load()

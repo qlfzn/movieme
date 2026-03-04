@@ -17,11 +17,9 @@ func NewAIClient(apiKey string) openai.Client{
 
 func GenerateSummary(ctx context.Context, client openai.Client, movieDetails Movie) (string, error){
 	prompt := fmt.Sprintf(
-		`You are a movie enthusiast writing short, punchy movie pitches.
-		
+		`You are a movie enthusiast writing short movie pitches.
 		Write a concise and entertaining summary (2 to 3 sentences max) that catches readers attention.
 		Use a fun, casual tone and include any creative analogy or comparison if related.
-
 		Focus on what makes the movie exciting or unique that relates to the plot.
 		Avoid generic phrases.
 		

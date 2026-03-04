@@ -1,75 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MovieMe - Simple Movie Explorer</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- Header -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MovieMe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
     <header>
-        <div class="header-content">
-            <h1>MovieMe</h1>
-            <p class="tagline">Find your next movie. Multiple genres to choose from.</p>
+      <div class="header-inner">
+        <div class="header-left">
+          <h1 class="logo">MovieMe</h1>
+          <p class="tagline">Find something worth watching.</p>
         </div>
+      </div>
     </header>
 
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Search Section -->
-        <section class="search-section">
-            <h2>What are you in the mood for?</h2>
-            
-            <form id="searchForm">
-                <div class="form-group">
-                    <label for="genreSelect">Choose a genre</label>
-                    <select id="genreSelect" required>
-                        <option value="">Select a genre...</option>
-                        <option value="Action">Action</option>
-                        <option value="Comedy">Comedy</option>
-                        <option value="Crime">Crime</option>
-                        <option value="Drama">Drama</option>
-                        <option value="Horror">Horror</option>
-                        <option value="Romance">Romance</option>
-                        <option value="Thriller">Thriller</option>
-                        <option value="Science Fiction">Sci-Fi</option>
-                    </select>
-                </div>
+    <main>
+      <section class="genre-section">
+        <nav class="genre-nav" id="genre-list" aria-label="Film genres">
+          <!-- genre buttons rendered by JS -->
+        </nav>
+      </section>
 
-                <button type="submit" class="button-primary" id="searchButton">
-                    Find Movies
-                </button>
-            </form>
-        </section>
+      <section class="movies-section">
+        <div class="movies-meta" id="movies-meta"></div>
 
-        <!-- Results Section -->
-        <section class="results-section">
-            <!-- Loading State -->
-            <div id="loadingMessage" class="loading-message hidden">
-                <p>Finding great movies for you...</p>
-            </div>
+        <div class="movie-grid" id="movie-grid">
+          <div class="empty-state" id="empty-state">
+            <p>Select a genre to start exploring.</p>
+          </div>
+        </div>
 
-            <!-- Error State -->
-            <div id="errorMessage" class="error-message hidden">
-                <p>Something went wrong. Please try again.</p>
-            </div>
+        <div class="error-state hidden" id="error-state">
+          <p id="error-message"></p>
+        </div>
+      </section>
+    </main>
 
-            <!-- Empty State -->
-            <div id="emptyMessage" class="empty-message">
-                <p>Select a genre above to discover movies</p>
-            </div>
+    <footer>
+      <span>Powered by TMDB &amp; OpenAI</span>
+    </footer>
 
-            <!-- Results -->
-            <div id="resultsContainer" class="hidden">
-                <div class="results-header">
-                    <span class="results-count" id="resultsCount"></span>
-                </div>
-                <div class="movies-grid" id="moviesGrid"></div>
-            </div>
-        </section>
-    </div>
-
-    <script src="app.js"></script>
-</body>
+    <script src="/app.js"></script>
+  </body>
 </html>

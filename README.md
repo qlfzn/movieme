@@ -6,10 +6,10 @@ A simple **REST API** that allows users to explore movies by genre using the **T
 
 ## Features
 
-* **Discover movies by genre**: <br> 
+- **Discover movies by genre**: <br>
   Users provide a genre name (e.g. `action`, `comedy`), and the API returns movies that match the selected genre.
 
-* **AI-generated movie summary**: <br>
+- **AI-generated movie summary**: <br>
   Users can request an AI-generated summary for any movie returned by the API.
 
 ---
@@ -48,7 +48,7 @@ GET /movies?genre=action
       "popularity": 50.8257,
       "release_date": "2025-07-09",
       "rating": 7.402
-    },
+    }
   ]
 }
 ```
@@ -58,7 +58,7 @@ GET /movies?genre=action
 ### 2. Get AI Summary for a Movie
 
 ```http
-POST /movies/{movieId}/summary
+POST /movies/summary
 ```
 
 **Response**
@@ -74,12 +74,17 @@ POST /movies/{movieId}/summary
 
 ## Tech Stack
 
-* **Backend**: Golang
-* **Frontend (Demo)**: HTML + JavaScript
-* **External APIs**:
+- **Backend**: Golang
+- **Frontend (Demo)**: HTML + JavaScript
+- **External APIs**:
 
-  * TMDB API
-  * OpenAI API (LLM-based summary generation)
+  - TMDB API
+  - OpenAI API (LLM-based summary generation)
+- **Docs**: Swagger
 
-* **Deployment**: AWS
----
+## Improvement
+- [ ] write tests
+- [ ] better error handling
+- [ ] database for persistent
+- [ ] integrate rate limiting
+- [ ] integrate caching
