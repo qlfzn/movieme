@@ -13,7 +13,7 @@ func main() {
 
 	err := godotenv.Load()
 	if err != nil {
-		logger.Fatalf("error loading .env file: %s", err)
+		logger.Panicf("error loading .env file: %s", err)
 	}
 
 	cfg := api.Config{

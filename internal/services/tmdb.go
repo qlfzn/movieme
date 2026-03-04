@@ -34,6 +34,7 @@ type Movie struct {
 	Popularity  float64 `json:"popularity"`
 	ReleaseDate string  `json:"release_date"`
 	VoteAverage float64 `json:"vote_average"`
+	PosterPath  string  `json:"poster_path"`
 }
 
 type MovieSummaryResponse struct {

@@ -155,16 +155,54 @@ main {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 12px;
   transition: border-color var(--transition), transform var(--transition);
 }
 
 .movie-card:hover {
   border-color: var(--border-hover);
   transform: translateY(-2px);
+}
+
+/* Poster */
+.card-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: var(--surface-alt);
+  flex-shrink: 0;
+}
+
+.card-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 300ms ease;
+}
+
+.movie-card:hover .card-poster img {
+  transform: scale(1.03);
+}
+
+.card-poster--missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+/* Card body (everything below the poster) */
+.card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
 }
 
 /* Card header: title + meta */
@@ -315,10 +353,22 @@ main {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
+}
+
+.skeleton-card .skeleton-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+}
+
+.skeleton-card .skeleton-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .skeleton-line {

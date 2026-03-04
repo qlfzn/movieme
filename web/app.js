@@ -81,11 +81,14 @@ function renderSkeletons() {
     const card = document.createElement("div");
     card.className = "skeleton-card";
     card.innerHTML = `
-      <div class="skeleton-line" style="height:16px; width:70%"></div>
-      <div class="skeleton-line" style="height:11px; width:38%"></div>
-      <div class="skeleton-line" style="height:10px; width:100%; margin-top:4px"></div>
-      <div class="skeleton-line" style="height:10px; width:92%"></div>
-      <div class="skeleton-line" style="height:10px; width:78%"></div>
+      <div class="skeleton-line skeleton-poster"></div>
+      <div class="skeleton-body">
+        <div class="skeleton-line" style="height:15px; width:72%"></div>
+        <div class="skeleton-line" style="height:10px; width:36%"></div>
+        <div class="skeleton-line" style="height:10px; width:100%; margin-top:4px"></div>
+        <div class="skeleton-line" style="height:10px; width:90%"></div>
+        <div class="skeleton-line" style="height:10px; width:76%"></div>
+      </div>
     `;
     movieGridEl.appendChild(card);
   }
@@ -110,27 +113,41 @@ function renderMovies(movies, genre) {
   });
 }
 
+const TMDB_IMG_BASE = "https://image.tmdb.org/t/p/w342";
+
 function createMovieCard(movie) {
   const year = formatYear(movie.release_date);
   const rating = formatRating(movie.vote_average);
+  const posterUrl = movie.poster_path
+    ? `${TMDB_IMG_BASE}${movie.poster_path}`
+    : null;
 
   const card = document.createElement("div");
   card.className = "movie-card";
 
+  const posterHtml = posterUrl
+    ? `<div class="card-poster">
+        <img src="${posterUrl}" alt="${escapeHtml(movie.title)} poster" loading="lazy" />
+       </div>`
+    : `<div class="card-poster card-poster--missing"><span>No image</span></div>`;
+
   card.innerHTML = `
-    <div>
-      <h2 class="card-title">${escapeHtml(movie.title)}</h2>
+    ${posterHtml}
+    <div class="card-body">
+      <div>
+        <h2 class="card-title">${escapeHtml(movie.title)}</h2>
+      </div>
+      <div class="card-meta">
+        <span class="year">${year}</span>
+        <span class="dot">·</span>
+        <span class="rating">
+          ${rating}
+          <span class="rating-source">TMDb</span>
+        </span>
+      </div>
+      <p class="card-overview">${escapeHtml(movie.overview || "No overview available.")}</p>
+      <div class="card-footer"></div>
     </div>
-    <div class="card-meta">
-      <span class="year">${year}</span>
-      <span class="dot">·</span>
-      <span class="rating">
-        ${rating}
-        <span class="rating-source">TMDb</span>
-      </span>
-    </div>
-    <p class="card-overview">${escapeHtml(movie.overview || "No overview available.")}</p>
-    <div class="card-footer"></div>
   `;
 
   const footer = card.querySelector(".card-footer");
