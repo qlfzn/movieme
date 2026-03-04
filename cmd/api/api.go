@@ -19,7 +19,7 @@ type Config struct {
 	Addr string
 }
 
-// create HTTP router for api
+// Mount HTTP router for api
 func (app *Application) Mount() http.Handler {
 	r := chi.NewRouter()
 
@@ -49,7 +49,7 @@ func (app *Application) Mount() http.Handler {
 	return r
 }
 
-// run server
+// Run server
 func (app *Application) Run(h http.Handler) error {
 	srv := &http.Server{
 		Addr:    app.Config.Addr,

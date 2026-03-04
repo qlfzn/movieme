@@ -93,25 +93,51 @@ main {
   border: none;
   cursor: pointer;
   font-family: inherit;
-  font-size: 0.875rem;
-  font-weight: 400;
   color: var(--text-secondary);
-  padding: 6px 14px;
+  padding: 8px 14px;
   border-radius: var(--radius);
   transition: color var(--transition), background-color var(--transition);
-  letter-spacing: 0.01em;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  text-align: left;
 }
 
 .genre-btn:hover {
-  color: var(--text);
   background-color: var(--surface);
 }
 
+.genre-btn:hover .genre-name {
+  color: var(--text);
+}
+
 .genre-btn.active {
-  color: var(--accent);
   background-color: var(--accent-glow);
+}
+
+.genre-btn.active .genre-name {
+  color: var(--accent);
+}
+
+.genre-btn.active .genre-mood {
+  color: var(--accent);
+  opacity: 0.6;
+}
+
+.genre-name {
+  font-size: 0.875rem;
   font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.genre-mood {
+  font-size: 0.7rem;
+  font-weight: 300;
+  color: var(--text-dim);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
 }
 
 /* ─── Movies meta bar ─────────────────────────────────────────────────────── */
@@ -164,6 +190,87 @@ main {
 .movie-card:hover {
   border-color: var(--border-hover);
   transform: translateY(-2px);
+}
+
+/* ─── Spotlight card ─────────────────────────────────────────────────────── */
+.spotlight-card {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  min-height: 300px;
+  transform: none;
+}
+
+.spotlight-card:hover {
+  transform: none;
+}
+
+.spotlight-poster {
+  width: 210px;
+  min-width: 210px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--surface-alt);
+}
+
+.spotlight-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 400ms ease;
+}
+
+.spotlight-card:hover .spotlight-poster img {
+  transform: scale(1.04);
+}
+
+.spotlight-poster--missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.spotlight-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.spotlight-badge {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.spotlight-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.spotlight-overview {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.spotlight-pitch-area {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
 }
 
 /* Poster */
@@ -269,12 +376,14 @@ main {
 
 /* AI pitch button */
 .btn-pitch {
+  width: 100%;
+  text-align: center;
   background: none;
   border: 1px solid var(--border-hover);
   color: var(--text-secondary);
   font-family: inherit;
   font-size: 0.8rem;
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-radius: var(--radius);
   cursor: pointer;
   transition: border-color var(--transition), color var(--transition), background-color var(--transition);
@@ -359,6 +468,12 @@ main {
   gap: 0;
 }
 
+.skeleton-spotlight {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  min-height: 300px;
+}
+
 .skeleton-card .skeleton-poster {
   width: 100%;
   aspect-ratio: 2 / 3;
@@ -410,6 +525,21 @@ footer {
 
   .genre-nav {
     gap: 2px;
+  }
+
+  .spotlight-card {
+    flex-direction: column;
+  }
+
+  .spotlight-poster {
+    width: 100%;
+    min-width: unset;
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  .spotlight-title {
+    font-size: 1.2rem;
   }
 }
 
